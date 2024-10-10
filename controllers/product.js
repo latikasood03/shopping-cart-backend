@@ -255,7 +255,7 @@ exports.getCheckout = async(req, res, next) => {
             })),
             mode: 'payment',
             payment_method_types: ['card'],
-            success_url: 'http://localhost:3000/checkout/success',
+            success_url: 'https://shopping-cart-zlcb.onrender.com/checkout/success',
         })
 
         res.status(200).json({
