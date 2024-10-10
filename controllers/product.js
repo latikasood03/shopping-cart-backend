@@ -70,8 +70,13 @@ exports.deleteProduct = async (req, res, next) => {
             { $pull: { 'cart.items': { productId: prodId } } } 
         );
 
+        await User.updateMany(
+            { 'wishlist.items.productId': prodId },  
+            { $pull: { 'wishlist.items': { productId: prodId } } } 
+        );
+
         return res.status(200).json({
-            message: 'Product deleted and removed from all user carts',
+            message: 'Product deleted and removed from all user carts and wishlists',
             deletedProduct: product
         });
     } catch(err) {
@@ -270,7 +275,18 @@ exports.getCheckout = async(req, res, next) => {
 exports.getCheckoutSuccess = async (req, res, next) => {
     try {
 
+    const sessionId = req.query.sessionId;
+    const existingOrder = await Order.findOne({ 'payment.sessionId': sessionId });
+
+    if (existingOrder) {
+        return res.status(200).json({ message: "Order already processed" });
+    }
+
     const user = await User.findById(req.userId).populate('cart.items.productId');
+
+    if (user.cart.items.length === 0) {
+        return res.status(400).json({ message: "No items in the cart to place an order." });
+    }
 
     const products = user.cart.items.map(i => ({
         quantity: i.quantity,

@@ -15,7 +15,7 @@ connectDB();
 
 exports.getOrders = async () => {
   try {
-
+    
     const orders = await Order.find()
     
     return {

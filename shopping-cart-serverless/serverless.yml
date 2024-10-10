@@ -10,6 +10,8 @@ provider:
   runtime: nodejs20.x
   region: ca-central-1
   endpointType: regional
+  environment:
+    JWT_SECRET: secrettokencode
 
 functions:
   getOrders:

@@ -17,13 +17,11 @@ app.use((req, res, next) => {
       'OPTIONS, GET, POST, PUT, PATCH, DELETE'
     );
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    // res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
 });
 
 app.use('/auth', authRoutes);
 app.use('/prod', prodRoutes);
-// app.use(prodRoutes);
 
 app.use((error, req, res, next) => {
     console.log(error);
