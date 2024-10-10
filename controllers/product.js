@@ -255,7 +255,7 @@ exports.getCheckout = async(req, res, next) => {
             })),
             mode: 'payment',
             payment_method_types: ['card'],
-            success_url: 'https://shopping-cart-zlcb.onrender.com/checkout/success',
+            success_url: 'https://shopping-cart-zlcb.onrender.com/checkout/success?sessionId={CHECKOUT_SESSION_ID}',
         })
 
         res.status(200).json({
@@ -275,7 +275,7 @@ exports.getCheckout = async(req, res, next) => {
 exports.getCheckoutSuccess = async (req, res, next) => {
     try {
 
-    const sessionId = req.query.sessionId;
+    const sessionId = req.params.sessionId;
     const existingOrder = await Order.findOne({ 'payment.sessionId': sessionId });
 
     if (existingOrder) {
@@ -298,7 +298,10 @@ exports.getCheckoutSuccess = async (req, res, next) => {
           email: user.email,
           userId: user._id
         },
-        products: products
+        products: products,
+        payment: {
+            sessionId: sessionId  
+        }
       });
   
       await order.save();

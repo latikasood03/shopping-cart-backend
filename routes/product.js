@@ -28,7 +28,7 @@ router.delete('/wishlist-delete/:prodId', isAuth, productController.removeProduc
 
 router.get("/checkout", isAuth, productController.getCheckout);
 
-router.get("/checkout/success", isAuth, productController.getCheckoutSuccess);
+router.get("/checkout/success/:sessionId", isAuth, productController.getCheckoutSuccess);
 
 router.get("/checkout/fail", productController.getCheckout);
 
